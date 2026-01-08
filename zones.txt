@@ -1,0 +1,5 @@
+google.com      A       1.2.3.4          0    60
+mta.ro          A       10.0.0.1         0    300
+www.mta.ro      CNAME   mta.ro           0    300
+mail.mta.ro     A       10.0.0.2         0    300
+mta.ro          MX      mail.mta.ro      10   300
