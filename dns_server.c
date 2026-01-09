@@ -73,8 +73,8 @@ struct DNS_HEADER {
 
 
 struct R_DATA {
-    unsigned short type;
-    unsigned short _class;
+    unsigned short type;        //A, CNAME, MX
+    unsigned short _class;      
     unsigned int ttl;
     unsigned short data_len;
 }__attribute__((packed));
@@ -284,18 +284,18 @@ int main() {
             int found_idx = -1;     // index pentru local zones
             int cache_slot = -1;    // index in cache
 
-            // Cautare in cache si zone locale
+            // Cautare in cache
             sem_wait(&shm->mutex);
             shm->total_requests++;
-            for (int i = 0; i < MAX_CACHE_SIZE; i++) {
-                if (shm->cache[i].is_valid && strcmp(shm->cache[i].domain, (char*)domain_name) == 0) {
-                    cache_slot = i;
-                    break;
+                for (int i = 0; i < MAX_CACHE_SIZE; i++) {
+                    if (shm->cache[i].is_valid && strcmp(shm->cache[i].domain, (char*)domain_name) == 0) {
+                        cache_slot = i;
+                        break;
+                    }
                 }
-            }
             sem_post(&shm->mutex);
 
-            //2. Cautare locala
+            //2. Cautare in zonele locale
             if (cache_slot == -1) {
                 for (int i = 0; i < zones_count; i++) {
                     if (strcmp(local_zones[i].domain, (char*)domain_name) == 0) {
